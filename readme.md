@@ -2,7 +2,7 @@
 
 # Assistente de Bem Estar - Projeto Imersão IA Alura + Google Gemini
 
-![Banner do Projeto (Opcional)](link_para_uma_imagem_atraente_ou_logo)
+BANNER A INSERIR
 
 Um aplicativo mobile focado em promover e facilitar o bem-estar holístico, utilizando Inteligência Artificial para personalizar, automatizar e integrar diversas áreas da vida que impactam a saúde física e mental. Desenvolvido como parte da Imersão IA da Alura em parceria com o Google Gemini.
 
@@ -28,7 +28,7 @@ A visão final do Assistente de Bem Estar abrange 7 áreas fundamentais, trabalh
 2.  **Bem-Estar Mental e Gestão do Estresse:** Diário de humor, técnicas de relaxamento, análise de sentimentos.
 3.  **Hidratação e Hábitos:** Acompanhamento de consumo de água e hábitos personalizados, lembretes inteligentes.
 4.  **Comunidade e Desafios:** Motivação social, desafios temáticos, troca de experiências.
-5.  **Nutrição:** Registro alimentar, análise de padrões, sugestões de receitas, chatbot culinário.
+5.  **Nutrição:** Registro alimentar, análise de padrões, sugestões de receitas, "ChefBot" culinário.
 6.  **Acompanhamento Médico:** Histórico de consultas/exames/vacinas/medicamentos, lembretes.
 7.  **Atividades Físicas:** Registro de treinos, metas, planos personalizados, chatbot "Treinador".
 
@@ -46,7 +46,7 @@ Este módulo serve como prova de conceito para a aplicação da IA na análise d
 
 * **Registro de Refeições:** Interface para adicionar refeições, incluindo nome do alimento, quantidade e opção de foto (conceitual ou implementada).
 * **Acompanhamento Básico:** Visualização do que foi registrado no dia/período.
-* **Chatbot Culinário com Gemini:** Um assistente interativo que utiliza o modelo Google Gemini para:
+* **Chefbot Culinário com Gemini:** Um assistente interativo que utiliza o modelo Google Gemini para:
     * Responder dúvidas rápidas sobre alimentos e nutrição.
     * Sugerir receitas com base em ingredientes disponíveis ou metas (ex: "receita proteica com frango").
     * Oferecer dicas de substituições saudáveis.
@@ -61,58 +61,29 @@ Neste projeto, o modelo Google Gemini foi utilizado principalmente no **Chatbot 
 
 Embora a análise de padrões alimentares mais complexa (como identificação de deficiências) seja uma feature futura dependente de um banco de dados, o chatbot já ilustra o potencial da IA em tornar a informação nutricional mais acessível e interativa.
 
+OUTRAS A INSERIR
+
 ## 💻 Tecnologias Utilizadas
 
-* Linguagem/Framework: [Liste as tecnologias que você usou, por exemplo: Python, Flask, Flutter, React Native, etc.]
-* Modelo de IA: Google Gemini [Especifique qual modelo, se souber: ex: `gemini-1.0-pro`, `gemini-1.5-flash`]
-* Outras Bibliotecas/APIs: [Liste outras dependências importantes]
+* Linguagem/Framework: A INSERIR
+* Modelo de IA: Google Gemini 2.0 Flash
+* Outras Bibliotecas/APIs: A INSERIR
 
 ## 🚀 Como Rodar o Projeto Localmente
 
 Para configurar e executar o Módulo de Nutrição localmente (conforme implementado):
 
-1.  Clone este repositório:
-    ```bash
-    git clone [https://github.com/seu-usuario/assistente-bem-estar.git](https://github.com/seu-usuario/assistente-bem-estar.git)
-    ```
-2.  Navegue até o diretório do projeto:
-    ```bash
-    cd assistente-bem-estar
-    ```
-3.  Instale as dependências:
-    ```bash
-    # Exemplo para Python/pip
-    pip install -r requirements.txt
-    # Exemplo para Node.js/npm ou Yarn
-    npm install
-    # ou
-    yarn install
-    ```
-4.  Configure suas credenciais para o Google Gemini API. Crie um arquivo `.env` na raiz do projeto (ou configure via variáveis de ambiente) com sua chave API:
-    ```dotenv
-    GOOGLE_API_KEY=SUA_CHAVE_API_AQUI
-    ```
-5.  Execute a aplicação:
-    ```bash
-    # Comando para iniciar seu app, por exemplo:
-    python app.py
-    # ou
-    npm start
-    ```
-6.  Acesse o aplicativo [Depende se é web, mobile local - explique como acessar/executar].
+A INSERIR
+
+## ▶️ Tutorial como rodar localmente
+
+A INSERIR
 
 ## ▶️ Vídeo de Apresentação
 
 Assista a este vídeo para entender a visão completa do Assistente de Bem Estar, o problema que ele resolve, as 7 áreas que ele abrange (incluindo o futuro suporte a múltiplos perfis), e como o Módulo de Nutrição se encaixa nesse ecossistema, incluindo os argumentos sobre Utilidade, Criatividade e Eficácia.
 
-[**Link ou Embed do Vídeo de Apresentação**]
-(Substitua este texto pelo link direto ou código embed do seu vídeo)
-
-## ▶️ Vídeo de Demonstração de Uso
-
-Veja em ação o Módulo de Nutrição implementado para a imersão. Este vídeo demonstra o processo de registro de refeições e a interação com o Chatbot Culinário powered by Google Gemini.
-
-[**Link ou Embed do Vídeo de Demonstração**]
+A INSERIR
 (Substitua este texto pelo link direto ou código embed do seu vídeo)
 
 ## Roadmap (Próximos Passos)
@@ -124,24 +95,16 @@ Veja em ação o Módulo de Nutrição implementado para a imersão. Este vídeo
 * Melhorar a UI/UX com base em testes com usuários.
 * Explorar outras funcionalidades baseadas em IA (ex: análise de imagem de alimentos, reconhecimento de voz para registro).
 
-## 🤝 Contribuindo
-
-Contribuições são bem-vindas! Se você tiver sugestões de melhoria, encontrar um bug ou quiser adicionar novas funcionalidades, sinta-se à vontade para abrir uma issue ou enviar um Pull Request.
-
-1.  Faça um fork do projeto.
-2.  Crie uma nova branch (`git checkout -b feature/sua-feature`).
-3.  Faça commit das suas alterações (`git commit -am 'Adiciona nova feature'`).
-4.  Faça push para a branch (`git push origin feature/sua-feature`).
-5.  Abra um Pull Request.
-
 ## 📜 Licença
 
-Este projeto está sob a licença [Nome da Licença, ex: MIT License]. Veja o arquivo `LICENSE` para mais detalhes.
+Este projeto está sob a licença MIT License. Veja o arquivo `LICENSE` para mais detalhes.
 
 ## ✉️ Contato
 
-[Seu Nome Completo]
-[![Perfil no GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/seu-usuario)
-[![Perfil no LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/seu-perfil-linkedin)
+Rodrigo Santos de Freitas
+Github: https://github.com/rsfreitas93
+LinkedIn (desatualizado): https://www.linkedin.com/in/rodrigosantosdefreitas/
+E-mail: rdg.sf82@gmail.com
+
 ---
 Feito com ❤️ e IA na Imersão Alura + Google Gemini.
