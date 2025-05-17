@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChefBot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@latest/marked.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .balao-usuario {
+            background-color: #e0f7fa; /* Tom de azul claro */
+            color: #000000;
+            border-radius: 20px;
+            padding: 12px 20px;
+            margin-bottom: 8px;
+            margin-left: auto;
+            margin-right: 10px;
+            max-width: 80%;
+            text-align: right;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .balao-chatbot {
+            background-color: #f0f4c3; /* Tom de verde claro */
+            color: #000000;
+            border-radius: 20px;
+            padding: 12px 20px;
+            margin-bottom: 8px;
+            margin-right: auto;
+            margin-left: 10px;
+            max-width: 80%;
+            text-align: left;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .mensagem-receita {
+            background-color: #ffffff;
+            border-radius: 20px;
+            padding: 12px 20px;
+            margin-bottom: 8px;
+            margin-right: auto;
+            margin-left: 10px;
+            max-width: 90%;
+            text-align: left;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+        }
+       .typing-indicator {
+            display: inline-block;
+            margin-left: 10px; /* Ajustado para melhor alinhamento */
+            vertical-align: middle;
+            /* Adiciona estilos para parecer um balão de chat */
+            background-color: #f0f4c3; /* Cor do balão do chatbot */
+            border-radius: 20px;
+            padding: 12px 20px;
+            margin-bottom: 8px;
+            margin-right: auto;
+            max-width: 80%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ccc;
+            margin: 0 2px;
+            animation: typing 1s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-3px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col h-screen">
+    <header class="bg-green-100 shadow-md p-4 text-center rounded-b-lg flex items-center justify-center relative">
+        <button id="voltar-pagina" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-green-500 hover:bg-green-600 text-white rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-green-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="M15 18 9 12l6-6"/></svg>
+        </button>
+        <h1 class="text-xl font-semibold text-green-700">ChefBot</h1>
+    </header>
+
+    <main id="chat-container" class="flex-1 overflow-y-auto p-4">
+        </main>
+
+    <footer class="bg-white shadow-inner p-4 rounded-t-lg">
+        <div class="flex items-center gap-2">
+            <input
+                type="text"
+                id="input-mensagem"
+                placeholder="Digite sua pergunta..."
+                class="flex-1 border border-gray-300 rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-green-400"
+            >
+            <button id="enviar-mensagem" class="bg-green-500 hover:bg-green-600 text-white rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-green-400">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><path d="m20.17 7.83a2 2 0 1 0-2.83 2.83L19 12l-1.66 1.34a2 2 0 1 0 2.83 2.83l.83-8.66z"/><path d="m3 21 19-9-9-9-9 9z"/></svg>
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const inputMensagem = document.getElementById('input-mensagem');
+        const enviarMensagem = document.getElementById('enviar-mensagem');
+        const voltarPagina = document.getElementById('voltar-pagina');
+        let typingIndicator = null; // Variável para armazenar a referência do indicador
+
+        // URL do seu backend Flask
+        const BACKEND_URL = 'http://127.0.0.1:5000/chat'; // Use 127.0.0.1 se estiver rodando localmente
+
+        function adicionarMensagem(texto, tipo) {
+            const mensagemDiv = document.createElement('div');
+            mensagemDiv.classList.add(tipo);
+            // Permite HTML básico dentro das mensagens do chatbot (para receitas)
+            const markdownText = texto; // Texto recebido da API
+            const htmlText = marked.parse(markdownText); // Converte Markdown para HTML
+
+            mensagemDiv.innerHTML = htmlText;
+            chatContainer.appendChild(mensagemDiv);
+            // Rola para o final do chat
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function mostrarTypingIndicator() {
+            if (!typingIndicator) {
+                typingIndicator = document.createElement('div');
+                typingIndicator.classList.add('typing-indicator');
+                typingIndicator.innerHTML = '<span></span><span></span><span></span>';
+                chatContainer.appendChild(typingIndicator);
+                 chatContainer.scrollTop = chatContainer.scrollHeight; // Rola para mostrar o indicador
+            }
+        }
+
+        function removerTypingIndicator() {
+            if (typingIndicator) {
+                chatContainer.removeChild(typingIndicator);
+                typingIndicator = null;
+            }
+        }
+
+        async function enviarMensagemParaBackend(mensagem) {
+            var mensagem = {msg: mensagem};
+
+            mostrarTypingIndicator(); // Mostra o indicador de digitação
+
+            try {
+                const response = await fetch('/agentes_ia/nutricao/chefbot', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(mensagem)
+                })
+
+                if(!response.ok){
+                    const errorText = await response.text(); // Tenta ler o corpo da resposta para o erro
+                    throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+                }
+
+                const data = await response.json();
+                adicionarMensagem(data, 'balao-chatbot');
+                // Adiciona um pequeno atraso ANTES de remover o indicador
+                // Isso dá tempo para o indicador ser visto e a mensagem ser exibida
+                setTimeout(() => {
+                    removerTypingIndicator(); // Remove o indicador após um pequeno atraso
+                }, 300); // Atraso de 300ms (ajuste se necessário)
+            } catch (error) {
+                console.error('Erro ao enviar mensagem para o backend:', error);
+                // Exibe uma mensagem de erro no chat
+                adicionarMensagem(`Desculpe, ocorreu um erro ao comunicar com o servidor: ${error.message}`, 'balao-chatbot');
+            } finally {
+                removerTypingIndicator(); // Remove o indicador de digitação
+            }
+        }
+
+        // Event listener para o botão de enviar
+        enviarMensagem.addEventListener('click', () => {
+            const mensagem = inputMensagem.value.trim();
+            if (mensagem !== '') {
+                adicionarMensagem(mensagem, 'balao-usuario'); // Adiciona a mensagem do usuário imediatamente
+                inputMensagem.value = ''; // Limpa o input
+                enviarMensagemParaBackend(mensagem); // Envia para o backend
+            }
+        });
+
+        // Event listener para a tecla Enter no input
+        inputMensagem.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Previne a quebra de linha padrão do Enter
+                enviarMensagem.click(); // Simula o clique no botão de enviar
+            }
+        });
+
+        // Mensagem inicial do chatbot
+        setTimeout(() => {
+             adicionarMensagem("Olá! Sou o ChefBot. Pergunte-me sobre receitas, ingredientes ou dicas de culinária!", 'balao-chatbot');
+        }, 1000); // Atraso menor para a mensagem inicial
+
+        // Event listener para o botão de voltar
+        voltarPagina.addEventListener('click', () => {
+             // Implemente a lógica de voltar página aqui, se necessário
+             // window.history.back(); // Pode ser usado para voltar no histórico do navegador
+             window.history.back();
+        });
+
+        // A função mostrarReceita não será mais chamada diretamente pelo frontend
+        // O backend pode formatar a resposta como HTML/Markdown se necessário,
+        // e o frontend a exibirá usando innerHTML.
+        // Se o backend retornar um objeto estruturado de receita,
+        // você precisará adaptar a função adicionarMensagem ou criar uma nova
+        // para formatar esse objeto em HTML no frontend.
+        // Por simplicidade, o backend neste exemplo retorna apenas texto.
+        // Se quiser que o backend retorne receitas estruturadas,
+        // você precisará modificar o backend e o frontend para lidar com isso.
+
+    </script>
+</body>
+</html>

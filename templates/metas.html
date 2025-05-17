@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metas Nutricionais</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@tailwindcss/browser@latest"></script>
+    <style>
+        /* Estilos personalizados para os gráficos (opcional, para exemplo) */
+        .progress-bar {
+            background-color: #f0f0f0;
+            border-radius: 1rem;
+            height: 0.75rem;
+            margin-bottom: 1rem;
+            position: relative; /* Para posicionar a barra de progresso */
+            overflow: hidden; /* Para garantir que a borda arredondada funcione */
+        }
+        .progress-bar-fill {
+            background-color: #86ef7d; /* Verde claro */
+            border-radius: 1rem;
+            height: 0.75rem;
+            width: 0%; /* A largura será definida dinamicamente com JavaScript */
+            transition: width 0.5s ease; /* Transição suave para a animação */
+            position: relative; /* Necessário para a animação de brilho */
+        }
+
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.5) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            background-size: 200% 100%;
+            animation: brilho 2s linear infinite;
+        }
+
+        @keyframes brilho {
+            0% { background-position: 100% 0; }
+            100% { background-position: -100% 0; }
+        }
+
+
+        .progress-circle {
+            position: relative;
+            width: 8rem; /* Ajuste conforme necessário */
+            height: 8rem;
+            margin: 0 auto 1rem auto;
+        }
+
+        .progress-circle svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg); /* Começa do topo */
+            overflow: visible; /* Garante que o stroke não seja cortado */
+        }
+
+        .progress-circle-background {
+            fill: none;
+            stroke: #f0f0f0;
+            stroke-width: 0.5rem;
+        }
+
+        .progress-circle-fill {
+            fill: none;
+            stroke: #86ef7d; /* Verde claro */
+            stroke-width: 0.5rem;
+            stroke-linecap: round; /* Bordas arredondadas para o preenchimento */
+            transition: stroke-dashoffset 0.5s ease; /* Transição suave para a animação */
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1rem;
+            font-weight: 500;
+            color: #4a5568;
+            text-anchor: middle; /* Centraliza o texto horizontalmente */
+            dominant-baseline: middle; /* Centraliza o texto verticalmente */
+            z-index: 1; /* Garante que o texto fique acima do SVG */
+        }
+
+        #retornar-home-btn:hover{cursor: pointer;}
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #3498db; /* Cor do spinner */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: auto; /* Centralizar, se necessário */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-inter">
+    <div class="container mx-auto p-4 md:p-6 lg:p-8">
+        <div class="flex justify-start mb-4">
+            <button id="retornar-home-btn" class="bg-white rounded-full shadow-md py-2 px-4 text-green-700 font-semibold hover:bg-green-50 transition duration-300 ease-in-out flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left-circle"><circle cx="12" cy="12" r="10"/><path d="M12 8l-4 4 4 4"/><path d="M16 12H8"/></svg>
+                Nutrição
+            </button>
+        </div>
+        <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Suas Metas Nutricionais</h1>
+
+        <section class="bg-white rounded-lg shadow-md p-4 md:p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Visão Geral</h2>
+            <div class="mb-4 text-sm text-gray-600">
+                <p>
+                    Suas metas de calorias e macronutrientes são personalizadas para você.
+                    Recomendamos que você consulte um nutricionista ou profissional de saúde
+                    para obter orientações e ajustes precisos.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <p class="text-gray-500 text-sm">Calorias</p>
+                    <p class="text-gray-700 font-semibold text-md" id="meta-calorias">2000 kcal</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 text-sm">Carboidratos</p>
+                    <p class="text-gray-700 font-semibold text-md" id="meta-carboidratos">250 g</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 text-sm">Proteínas</p>
+                    <p class="text-gray-700 font-semibold text-md" id="meta-proteinas">100 g</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 text-sm">Gorduras</p>
+                    <p class="text-gray-700 font-semibold text-md" id="meta-gorduras">80 g</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-lg shadow-md p-4 md:p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Progresso Diário</h2>
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-gray-600 font-medium">Calorias</span>
+                    <span class="text-sm text-gray-500"><span id="calorias-consumidas">0</span>/<span id="meta-calorias-diario">2000</span> kcal</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-bar-fill" id="progresso-calorias"></div>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-gray-600 font-medium">Carboidratos</span>
+                    <span class="text-sm text-gray-500"><span id="carboidratos-consumidos">0</span>/<span id="meta-carboidratos-diario">250</span> g</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-bar-fill" id="progresso-carboidratos"></div>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-gray-600 font-medium">Proteínas</span>
+                    <span class="text-sm text-gray-500"><span id="proteinas-consumidas">0</span>/<span id="meta-proteinas-diario">100</span> g</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-bar-fill" id="progresso-proteinas"></div>
+                </div>
+            </div>
+
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-gray-600 font-medium">Gorduras</span>
+                    <span class="text-sm text-gray-500"><span id="gorduras-consumidas">0</span>/<span id="meta-gorduras-diario">80</span> g</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-bar-fill" id="progresso-gorduras"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-lg shadow-md p-4 md:p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Progresso Semanal</h2>
+             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="flex flex-col items-center">
+                    <div class="progress-circle">
+                        <svg viewBox="0 0 80 80"> <circle class="progress-circle-background" r="35" cx="40" cy="40"></circle> <circle class="progress-circle-fill" id="progresso-semana-calorias" r="35" cx="40" cy="40"></circle> </svg>
+                        <div class="progress-text" id="progresso-semana-calorias-texto">0%</div> </div>
+                    <p class="text-sm text-gray-500 mt-2">Calorias</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="progress-circle">
+                         <svg viewBox="0 0 80 80">
+                            <circle class="progress-circle-background" r="35" cx="40" cy="40"></circle>
+                            <circle class="progress-circle-fill" id="progresso-semana-carboidratos" r="35" cx="40" cy="40"></circle>
+                        </svg>
+                        <div class="progress-text" id="progresso-semana-carboidratos-texto">0%</div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2">Carboidratos</p>
+                </div>
+                 <div class="flex flex-col items-center">
+                    <div class="progress-circle">
+                         <svg viewBox="0 0 80 80">
+                            <circle class="progress-circle-background" r="35" cx="40" cy="40"></circle>
+                            <circle class="progress-circle-fill" id="progresso-semana-proteinas" r="35" cx="40" cy="40"></circle>
+                        </svg>
+                        <div class="progress-text" id="progresso-semana-proteinas-texto">0%</div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2">Proteínas</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="progress-circle">
+                        <svg viewBox="0 0 80 80">
+                            <circle class="progress-circle-background" r="35" cx="40" cy="40"></circle>
+                            <circle class="progress-circle-fill" id="progresso-semana-gorduras" r="35" cx="40" cy="40"></circle>
+                        </svg>
+                        <div class="progress-text" id="progresso-semana-gorduras-texto">0%</div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2">Gorduras</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-lg shadow-md p-4 md:p-6">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Análise Personalizadas</h2>
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded" role="alert" id="dica-do-dia">
+                <p class="font-bold">Análise do Dia:</p>
+                <div id="loading-animation" class="text-center text-gray-700 text-sm">
+                    <div class="spinner"></div>
+                    Carregando... 
+                </div>
+                <p id="dica_rapida"></p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Elementos do DOM
+        const retornarHomeBtn = document.getElementById('retornar-home-btn');
+
+        // Event Listeners
+        retornarHomeBtn.addEventListener('click', () => {
+            // Aqui você deve adicionar a lógica para retornar à página inicial do seu sistema
+            window.location.href = "/nutricao";
+        });
+
+        // Funções para atualizar os gráficos de progresso
+        function atualizarProgressoBarra(idBarra, consumo, meta) {
+            const barra = document.getElementById(idBarra);
+            if (meta > 0) {
+                const porcentagem = Math.min((consumo / meta) * 100, 100); // Limita a 100%
+                barra.style.width = `${porcentagem}%`;
+            } else {
+                barra.style.width = '0%';
+            }
+        }
+
+        function atualizarProgressoCirculo(idCirculo, consumo, meta, idTexto) {
+            const circulo = document.getElementById(idCirculo);
+            const texto = document.getElementById(idTexto);
+            const raio = 35; // Raio do círculo (ajustado para o viewBox 0 0 80 80)
+            const circunferencia = 2 * Math.PI * raio; // Circunferência
+
+            if (meta > 0) {
+                const porcentagem = Math.min((consumo / meta) * 100, 100);  // Limita a 100%
+                const progresso = circunferencia - (porcentagem / 100) * circunferencia;
+                circulo.style.strokeDasharray = circunferencia; // Define o comprimento total do traço
+                circulo.style.strokeDashoffset = progresso;
+                texto.textContent = `${Math.round(porcentagem)}%`;
+            } else {
+                circulo.style.strokeDasharray = circunferencia;
+                circulo.style.strokeDashoffset = circunferencia; // Círculo vazio
+                texto.textContent = `0%`;
+            }
+        }
+
+        // Dados de exemplo (seriam substituídos por dados reais do aplicativo)
+        const metaCalorias = 2000;
+        const metaCarboidratos = 250;
+        const metaProteinas = 100;
+        const metaGorduras = 80;
+
+        let caloriasConsumidas = 1500;
+        let carboidratosConsumidos = 200;
+        let proteinasConsumidas = 90;
+        let gordurasConsumidas = 60;
+
+        let caloriasSemana = 8000;
+        let carboidratosSemana = 1000;
+        let proteinasSemana = 450;
+        let gordurasSemana = 350;
+        const diasNaSemana = 7;
+
+        // Atualiza os valores exibidos na tela
+        document.getElementById('meta-calorias').textContent = `${metaCalorias} kcal`;
+        document.getElementById('meta-carboidratos').textContent = `${metaCarboidratos} g`;
+        document.getElementById('meta-proteinas').textContent = `${metaProteinas} g`;
+        document.getElementById('meta-gorduras').textContent = `${metaGorduras} g`;
+
+        document.getElementById('calorias-consumidas').textContent = caloriasConsumidas;
+        document.getElementById('meta-calorias-diario').textContent = metaCalorias;
+        document.getElementById('carboidratos-consumidos').textContent = carboidratosConsumidos;
+        document.getElementById('meta-carboidratos-diario').textContent = metaCarboidratos;
+        document.getElementById('proteinas-consumidas').textContent = proteinasConsumidas;
+        document.getElementById('meta-proteinas-diario').textContent = metaProteinas;
+        document.getElementById('gorduras-consumidas').textContent = gordurasConsumidas;
+        document.getElementById('meta-gorduras-diario').textContent = metaGorduras;
+
+        // Atualiza os gráficos de progresso diário
+        atualizarProgressoBarra('progresso-calorias', caloriasConsumidas, metaCalorias);
+        atualizarProgressoBarra('progresso-carboidratos', carboidratosConsumidos, metaCarboidratos);
+        atualizarProgressoBarra('progresso-proteinas', proteinasConsumidas, metaProteinas);
+        atualizarProgressoBarra('progresso-gorduras', gordurasConsumidas, metaGorduras);
+
+        // Atualiza os gráficos de progresso semanal
+        // Para o cálculo semanal, a meta é a meta diária multiplicada pelos dias da semana
+        atualizarProgressoCirculo('progresso-semana-calorias', caloriasSemana, metaCalorias * diasNaSemana, 'progresso-semana-calorias-texto');
+        atualizarProgressoCirculo('progresso-semana-carboidratos', carboidratosSemana, metaCarboidratos * diasNaSemana, 'progresso-semana-carboidratos-texto');
+        atualizarProgressoCirculo('progresso-semana-proteinas', proteinasSemana, metaProteinas * diasNaSemana, 'progresso-semana-proteinas-texto');
+        atualizarProgressoCirculo('progresso-semana-gorduras', gordurasSemana, metaGorduras * diasNaSemana, 'progresso-semana-gorduras-texto');
+
+        function carregarDica(){
+            const loadingAnimation = document.getElementById('loading-animation');
+            const dicaRapidaElement = document.getElementById('dica_rapida');
+
+            loadingAnimation.classList.remove('hidden');
+            dicaRapidaElement.classList.add('hidden');
+
+            fetch('/agentes_ia/nutricao/getDicaMetas')
+                .then(response => response.json())
+                .then(data => {
+                    loadingAnimation.classList.add('hidden');
+                    dicaRapidaElement.classList.remove('hidden');
+                    dicaRapidaElement.innerHTML = data;
+                })
+                .catch(error => {
+                    // Em caso de erro, você pode esconder a animação e mostrar uma mensagem de erro, se desejar
+                    loadingAnimation.classList.add('hidden');
+                    dicaRapidaElement.classList.remove('hidden');
+                    dicaRapidaElement.innerHTML = 'Ocorreu um erro ao carregar a dica.';
+                })
+        }
+
+        carregarDica()
+    </script>
+</body>
+</html>

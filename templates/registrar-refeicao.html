@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Refeição | Bem-Estar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@tailwindcss/browser@latest"></script>
+    <style>
+        /* Estilos personalizados para a barra de rolagem (opcional) */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
+        }
+        *::-webkit-scrollbar {
+            width: 5px;
+        }
+        *::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        *::-webkit-scrollbar-thumb {
+            background-color: rgba(155, 155, 155, 0.5);
+            border-radius: 20px;
+            border: transparent;
+        }
+
+        .bg-green-100{background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));}
+        #visualizacao-foto{max-width: 20%;}
+        #retornar-home-btn:hover{cursor: pointer;}
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #3498db; /* Cor do spinner */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: auto; /* Centralizar, se necessário */
+        }
+    </style>
+</head>
+<body class="bg-green-100 font-inter">
+    <div class="container mx-auto p-4 md:p-6 lg:p-8">
+        <div class="flex justify-start mb-4">
+            <button id="retornar-home-btn" class="bg-white rounded-full shadow-md py-2 px-4 text-green-700 font-semibold hover:bg-green-50 transition duration-300 ease-in-out flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left-circle"><circle cx="12" cy="12" r="10"/><path d="M12 8l-4 4 4 4"/><path d="M16 12H8"/></svg>
+                Nutrição
+            </button>
+        </div>
+        <h1 class="text-2xl md:text-3xl lg:text-4xl font-semibold text-green-600 text-center mb-6">Registrar Refeição</h1>
+
+        <div class="flex flex-col md:flex-row gap-4 mb-6">
+            <button id="digitar-alimento-btn" class="flex-1 bg-white rounded-full shadow-md py-3 md:py-4 px-4 md:px-6 text-green-700 font-semibold hover:bg-green-50 transition duration-300 ease-in-out flex items-center justify-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                Digitar Alimento
+            </button>
+            <button id="tirar-foto-btn" class="flex-1 bg-white rounded-full shadow-md py-3 md:py-4 px-4 md:px-6 text-green-700 font-semibold hover:bg-green-50 transition duration-300 ease-in-out flex items-center justify-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-camera"><path d="M15 8h6a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h6"/><path d="M9 15a3 3 0 1 0 6 0 3 3 0 0 0-6 0"/><path d="M22 4h-4"/><path d="M6 4H2"/></svg>
+                Tirar Foto
+            </button>
+        </div>
+
+        <div id="secao-digitar-alimento" class="bg-white rounded-lg shadow-md p-4 md:p-6 lg:p-8 mb-6">
+            <h2 class="text-lg md:text-xl font-semibold text-green-600 mb-4">Adicionar Alimento</h2>
+            <div class="mb-4">
+                <label for="alimento-input" class="block text-gray-700 text-sm font-bold mb-2">Buscar Alimento:</label>
+                <input type="text" id="alimento-input" placeholder="Ex: Maçã, Arroz, Frango..." class="shadow appearance-none border rounded-full w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2">
+                <ul id="sugestoes-alimentos" class="bg-white rounded-md shadow-sm border border-gray-200 max-h-48 overflow-y-auto z-10 hidden">
+                    </ul>
+            </div>
+            <div class="flex flex-col md:flex-row gap-4 mb-4 items-center">
+                <div class="flex-1">
+                    <label for="quantidade-input" class="block text-gray-700 text-sm font-bold mb-2">Quantidade:</label>
+                    <input type="number" id="quantidade-input" value="1" min="1" class="shadow appearance-none border rounded-full w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                </div>
+                <div class="flex-1">
+                    <label for="unidade-select" class="block text-gray-700 text-sm font-bold mb-2">Unidade:</label>
+                    <select id="unidade-select" class="shadow appearance-none border rounded-full w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <option value="gramas">gramas</option>
+                        <option value="ml">ml</option>
+                        <option value="unidade">unidade(s)</option>
+                        <option value="xicara">xícara(s)</option>
+                        <option value="colher_sopa">colher(es) de sopa</option>
+                        <option value="colher_cha">colher(es) de chá</option>
+                    </select>
+                </div>
+                <button id="adicionar-alimento-btn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline whitespace-nowrap">
+                    Adicionar Alimento
+                </button>
+            </div>
+
+            <div class="mb-4">
+                <h3 class="text-md font-semibold text-green-600 mb-2">Alimentos Adicionados:</h3>
+                <ul id="lista-alimentos" class="space-y-2">
+                    </ul>
+            </div>
+
+            <div class="mb-4">
+                <label for="notas-input" class="block text-gray-700 text-sm font-bold mb-2">Notas sobre a Refeição (opcional):</label>
+                <textarea id="notas-input" placeholder="Ex: Comi no trabalho, estava me sentindo feliz..." class="shadow appearance-none border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+            </div>
+
+            <button id="salvar-refeicao-btn" class="bg-green-600 hover:bg-green-800 text-white font-bold py-3 px-6 rounded-full focus:outline-none focus:shadow-outline transition duration-300 ease-in-out w-full md:w-auto">
+                Salvar Refeição
+            </button>
+        </div>
+
+        <div id="secao-tirar-foto" class="bg-white rounded-lg shadow-md p-4 md:p-6 lg:p-8 mb-6 hidden">
+            <h2 class="text-lg md:text-xl font-semibold text-green-600 mb-4">Registrar Refeição por Foto</h2>
+            <p id="instrucao-foto" class="text-gray-700 mb-4">Tire uma foto da sua refeição:</p>
+            <div id="visualizacao-foto" class="mb-4 hidden">
+                <img id="foto-refeicao" src="#" alt="Foto da Refeição" class="rounded-md max-w-full h-auto">
+            </div>
+            <input type="file" id="camera-input" accept="image/*" capture="environment" class="mb-4">
+            <div class="mb-4">
+                <label for="descricao-foto-input" class="block text-gray-700 text-sm font-bold mb-2">Descrição da Refeição:</label>
+                <div id="loading-animation" class="text-center text-gray-700 text-sm hidden">
+                    <div class="spinner"></div>
+                    Aguarde enquanto a IA interpreta sua imagem... 
+                </div>
+                <textarea id="descricao-foto-input" placeholder="Descreva os alimentos na foto (opcional)..." class="shadow appearance-none border rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+            </div>
+            <button id="salvar-refeicao-foto-btn" class="bg-green-600 hover:bg-green-800 text-white font-bold py-3 px-6 rounded-full focus:outline-none focus:shadow-outline transition duration-300 ease-in-out w-full md:w-auto">
+                Salvar Refeição (com Foto)
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Elementos do DOM
+        const retornarHomeBtn = document.getElementById('retornar-home-btn');
+        const digitarAlimentoBtn = document.getElementById('digitar-alimento-btn');
+        const tirarFotoBtn = document.getElementById('tirar-foto-btn');
+        const secaoDigitarAlimento = document.getElementById('secao-digitar-alimento');
+        const secaoTirarFoto = document.getElementById('secao-tirar-foto');
+        const alimentoInput = document.getElementById('alimento-input');
+        const sugestoesAlimentosLista = document.getElementById('sugestoes-alimentos');
+        const quantidadeInput = document.getElementById('quantidade-input');
+        const unidadeSelect = document.getElementById('unidade-select');
+        const adicionarAlimentoBtn = document.getElementById('adicionar-alimento-btn');
+        const listaAlimentos = document.getElementById('lista-alimentos');
+        const notasInput = document.getElementById('notas-input');
+        const salvarRefeicaoBtn = document.getElementById('salvar-refeicao-btn');
+        const cameraInput = document.getElementById('camera-input');
+        const visualizacaoFoto = document.getElementById('visualizacao-foto');
+        const fotoRefeicao = document.getElementById('foto-refeicao');
+        const descricaoFotoInput = document.getElementById('descricao-foto-input');
+        const salvarRefeicaoFotoBtn = document.getElementById('salvar-refeicao-foto-btn');
+        const instrucaoFoto = document.getElementById('instrucao-foto'); // Mensagem instrucional para tirar a foto
+        const loadingAnimation = document.getElementById('loading-animation');
+
+        // Dados de exemplo para sugestões de alimentos (pode vir de um banco de dados)
+        const alimentosDisponiveis = [
+            "Maçã", "Banana", "Arroz branco", "Arroz integral", "Feijão preto", "Feijão carioca", "Frango grelhado", "Salada mista", "Pão integral", "Pão branco",
+            "Ovo cozido", "Leite integral", "Leite desnatado", "Queijo branco", "Abacate", "Tomate", "Cenoura", "Brócolis", "Espinafre", "Salmão grelhado",
+            "Macarrão integral", "Macarrão branco", "Iogurte natural", "Aveia em flocos", "Amêndoa", "Noz", "Castanha de caju", "Azeite extra virgem", "Manteiga", "Margarina"
+        ];
+
+        let refeicao = []; // Array para armazenar os alimentos adicionados
+
+        // Funções Auxiliares
+        /**
+         * Função para exibir sugestões de alimentos com base na entrada do usuário
+         * @param {string} input - A string de entrada do usuário
+         */
+        function exibirSugestoes(input) {
+            sugestoesAlimentosLista.innerHTML = ''; // Limpa a lista de sugestões
+            if (input.trim() === '') {
+                sugestoesAlimentosLista.classList.add('hidden');
+                return;
+            }
+
+            const sugestoesFiltradas = alimentosDisponiveis.filter(alimento =>
+                alimento.toLowerCase().includes(input.toLowerCase())
+            );
+
+            if (sugestoesFiltradas.length === 0) {
+                sugestoesAlimentosLista.classList.add('hidden');
+                return;
+            }
+
+            sugestoesFiltradas.forEach(alimento => {
+                const li = document.createElement('li');
+                li.textContent = alimento;
+                li.classList.add('px-4', 'py-2', 'cursor-pointer', 'hover:bg-green-100', 'transition', 'duration-200');
+                li.addEventListener('click', () => {
+                    alimentoInput.value = alimento;
+                    sugestoesAlimentosLista.classList.add('hidden');
+                });
+                sugestoesAlimentosLista.appendChild(li);
+            });
+
+            sugestoesAlimentosLista.classList.remove('hidden');
+        }
+
+        /**
+         * Função para adicionar um alimento à lista de refeição
+         */
+        function adicionarAlimento() {
+            const alimento = alimentoInput.value.trim();
+            const quantidade = quantidadeInput.value;
+            const unidade = unidadeSelect.value;
+
+            if (alimento === '' || quantidade <= 0) {
+                alert('Por favor, insira um alimento e uma quantidade válida.'); // Usar um Toast ou Snackbar seria melhor
+                return;
+            }
+
+            var alimentoObj = {
+                nome: alimento,
+                quantidade: quantidade,
+                unidade: unidade
+            };
+
+            fetch('/agentes_ia/nutricao/getConversao', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(alimentoObj)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    var alimentoObj = {
+                        nome: alimento,
+                        quantidade: quantidade,
+                        unidade: unidade,
+                        quantidade_calculada: data,
+                        unidade_calculada: 'gramas'
+                    };
+
+                    refeicao.push(alimentoObj);
+                    atualizarListaAlimentos();
+                    alimentoInput.value = ''; // Limpa o input após adicionar
+                    quantidadeInput.value = '1';
+                    sugestoesAlimentosLista.classList.add('hidden');
+                })
+                .catch(error => {
+                    refeicao.push(alimentoObj);
+                    atualizarListaAlimentos();
+                    alimentoInput.value = ''; // Limpa o input após adicionar
+                    quantidadeInput.value = '1';
+                    sugestoesAlimentosLista.classList.add('hidden');
+                })
+        }
+
+        /**
+         * Função para atualizar a exibição da lista de alimentos
+         */
+        function atualizarListaAlimentos() {
+            listaAlimentos.innerHTML = ''; // Limpa a lista na interface
+            refeicao.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.classList.add('flex', 'justify-between', 'items-center', 'bg-green-50', 'rounded-md', 'py-2', 'px-3', 'text-gray-700');
+                if(item.quantidade_calculada){
+                    li.textContent = `${item.nome} - ${item.quantidade} ${item.unidade} (convertida por IA: ${item.quantidade_calculada} ${item.unidade_calculada})`;
+                }
+                
+
+                const editarBtn = document.createElement('button');
+                editarBtn.textContent = 'Editar';
+                editarBtn.classList.add('bg-yellow-300', 'hover:bg-yellow-400', 'text-gray-800', 'font-bold', 'py-1', 'px-2', 'rounded-full', 'text-xs', 'mr-2');
+                editarBtn.addEventListener('click', () => editarItem(index));
+
+                const removerBtn = document.createElement('button');
+                removerBtn.textContent = 'Remover';
+                removerBtn.classList.add('bg-red-500', 'hover:bg-red-700', 'text-white', 'font-bold', 'py-1', 'px-2', 'rounded-full', 'text-xs');
+                removerBtn.addEventListener('click', () => removerItem(index));
+
+                const buttonContainer = document.createElement('div');
+                buttonContainer.appendChild(editarBtn);
+                buttonContainer.appendChild(removerBtn);
+                li.appendChild(buttonContainer);
+                listaAlimentos.appendChild(li);
+            });
+        }
+
+        /**
+         * Função para editar um item da lista de refeição
+         * @param {number} index - O índice do item a ser editado
+         */
+        function editarItem(index) {
+            const item = refeicao[index];
+            alimentoInput.value = item.nome;
+            quantidadeInput.value = item.quantidade;
+            unidadeSelect.value = item.unidade;
+
+            // Remove o item da lista para que ele não seja duplicado ao adicionar novamente
+            refeicao.splice(index, 1);
+            atualizarListaAlimentos();
+        }
+
+        /**
+         * Função para remover um item da lista de refeição
+         * @param {number} index - O índice do item a ser removido
+         */
+        function removerItem(index) {
+            refeicao.splice(index, 1);
+            atualizarListaAlimentos();
+        }
+
+        /**
+         * Função para salvar a refeição (com ou sem foto)
+         */
+        function salvarRefeicao(comFoto = false) {
+            const notas = comFoto ? descricaoFotoInput.value : notasInput.value;
+            if (refeicao.length === 0 && !comFoto) {
+                alert('Por favor, adicione pelo menos um alimento à refeição.'); // Usar Toast/Snackbar
+                return;
+            }
+
+            if (comFoto && !fotoRefeicao.src) {
+                alert('Por favor, tire uma foto da refeição.');
+                return;
+            }
+
+            const refeicaoFinal = {
+                alimentos: refeicao,
+                notas: notas,
+                data: new Date(),
+                foto: comFoto ? fotoRefeicao.src : null // null se não houver foto
+            };
+
+            // Aqui você enviaria 'refeicaoFinal' para o servidor ou armazenaria localmente
+            console.log('Refeição Salva:', refeicaoFinal);
+            alert('Refeição salva com sucesso!'); // Usar Toast/Snackbar
+
+            // Limpa os campos e a lista após salvar
+            refeicao = [];
+            atualizarListaAlimentos();
+            notasInput.value = '';
+            descricaoFotoInput.value = '';
+            visualizacaoFoto.classList.add('hidden');
+            fotoRefeicao.src = '#'; // Limpa a fonte da imagem
+            // Reseta a interface para a seção de digitar alimento
+            secaoDigitarAlimento.classList.remove('hidden');
+            secaoTirarFoto.classList.add('hidden');
+            digitarAlimentoBtn.classList.remove('bg-green-50');
+            digitarAlimentoBtn.classList.add('bg-white');
+            tirarFotoBtn.classList.remove('bg-white');
+            tirarFotoBtn.classList.add('bg-green-50');
+
+        }
+
+        // Event Listeners
+        retornarHomeBtn.addEventListener('click', () => {
+            // Aqui você deve adicionar a lógica para retornar à página inicial do seu sistema
+            window.location.href = "/nutricao";
+        });
+
+        digitarAlimentoBtn.addEventListener('click', () => {
+            secaoDigitarAlimento.classList.remove('hidden');
+            secaoTirarFoto.classList.add('hidden');
+             // Atualiza estilos dos botões para indicar a seção ativa
+            digitarAlimentoBtn.classList.remove('bg-white');
+            digitarAlimentoBtn.classList.add('bg-green-50');
+            tirarFotoBtn.classList.remove('bg-green-50');
+            tirarFotoBtn.classList.add('bg-white');
+        });
+
+        tirarFotoBtn.addEventListener('click', () => {
+            secaoDigitarAlimento.classList.add('hidden');
+            secaoTirarFoto.classList.remove('hidden');
+            // Atualiza estilos dos botões para indicar a seção ativa
+            tirarFotoBtn.classList.remove('bg-white');
+            tirarFotoBtn.classList.add('bg-green-50');
+            digitarAlimentoBtn.classList.remove('bg-green-50');
+            digitarAlimentoBtn.classList.add('bg-white');
+        });
+
+        alimentoInput.addEventListener('input', () => exibirSugestoes(alimentoInput.value));
+        adicionarAlimentoBtn.addEventListener('click', adicionarAlimento);
+        salvarRefeicaoBtn.addEventListener('click', () => salvarRefeicao(false));
+        salvarRefeicaoFotoBtn.addEventListener('click', () => salvarRefeicao(true));
+
+        cameraInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                fotoRefeicao.src = reader.result;
+                visualizacaoFoto.classList.remove('hidden');
+                instrucaoFoto.textContent = 'Foto da Refeição:'; // Atualiza o texto para indicar que a foto foi carregada
+
+                loadingAnimation.classList.remove('hidden');
+
+                var formData = new FormData()
+                formData.append('imagem', file, file.name)
+
+                fetch('/agentes_ia/nutricao/getAlimentosImg', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        descricaoFotoInput.innerHTML = data
+                        loadingAnimation.classList.add('hidden');
+                    })
+                    .catch(error => {
+                        descricaoFotoInput.innerHTML = "Não conseguimos analisar sua imagem!"
+                        loadingAnimation.classList.add('hidden');
+                    })
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>

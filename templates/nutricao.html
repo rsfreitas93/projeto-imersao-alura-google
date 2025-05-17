@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicativo de Bem-Estar: Nutrição</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .img50{ width: 50px; }
+        .img80{ width: 80px; }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #3498db; /* Cor do spinner */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: auto; /* Centralizar, se necessário */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col items-center min-h-screen py-8">
+    <div class="bg-white rounded-3xl shadow-lg p-6 w-full max-w-2xl space-y-8">
+        <div class="flex justify-start mb-4">
+            <button id="retornar-home-btn" class="bg-white rounded-full shadow-md py-2 px-4 text-green-700 font-semibold hover:bg-green-50 transition duration-300 ease-in-out flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left-circle"><circle cx="12" cy="12" r="10"/><path d="M12 8l-4 4 4 4"/><path d="M16 12H8"/></svg>
+                Início
+            </button>
+        </div>
+
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-semibold text-gray-800">Olá, [Nome do Usuário]!</h1>
+                <p class="text-gray-600 text-sm">Que bom te ver! Vamos cuidar da sua nutrição.</p>
+            </div>
+            <img src="{{ url_for('static', filename='nutricao/tela01_user.png')}}" alt="Ícone de nutrição" class="rounded-full img50">
+        </div>
+
+        <div class="bg-gradient-to-r from-green-100 to-yellow-100 rounded-2xl p-6 flex items-center justify-between">
+            <div class="flex flex-col space-y-2">
+                <h2 class="text-xl font-semibold text-gray-800">Seu Progresso Diário</h2>
+                <p class="text-gray-600 text-sm">Calorias: 1200/2000</p>
+                <a href="nutricao/metas">
+                    <button class="mt-2 bg-white/20 text-green-700 rounded-full px-4 py-2 text-sm font-medium hover:bg-white/30 transition duration-300">
+                        Minhas Metas
+                    </button>
+                </a>
+            </div>
+            <div class="w-24 h-24 rounded-full border-4 border-green-500 flex items-center justify-center">
+                <span class="text-xl font-bold text-green-700">60%</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-6">
+            <a href="nutricao/registrar-refeicao" class="bg-white rounded-2xl shadow-md p-4 flex flex-col items-center justify-center hover:bg-gray-50 transition duration-300">
+                 <img src="{{ url_for('static', filename='nutricao/tela01_refeicao.png')}}" alt="Registrar Refeição" class="rounded-full mb-2 img50">
+                <span class="text-gray-700 font-medium text-sm">Registrar Refeição</span>
+            </a>
+            <a href="nutricao/plano-alimentar" class="bg-white rounded-2xl shadow-md p-4 flex flex-col items-center justify-center hover:bg-gray-50 transition duration-300">
+                <img src="{{ url_for('static', filename='nutricao/tela01_plano.png')}}" alt="Ver Plano Alimentar" class="rounded-full mb-2 img50">
+                <span class="text-gray-700 font-medium text-sm">Plano Alimentar</span>
+            </a>
+            <a href="nutricao/bioimpedancia" class="bg-white rounded-2xl shadow-md p-4 flex flex-col items-center justify-center hover:bg-gray-50 transition duration-300">
+                 <img src="{{ url_for('static', filename='nutricao/tela01_bioimpedancia.png')}}" alt="Bioimpedância" class="rounded-full mb-2 img50">
+                <span class="text-gray-700 font-medium text-sm">Bioimpedância</span>
+            </a>
+            <a href="nutricao/chefbot" class="bg-white rounded-2xl shadow-md p-4 flex flex-col items-center justify-center hover:bg-gray-50 transition duration-300">
+                <img src="{{ url_for('static', filename='nutricao/tela01_chatbot.png')}}" alt="Chatbot Culinário" class="rounded-full mb-2 img50">
+                <span class="text-gray-700 font-medium text-sm">Chatbot Culinário</span>
+            </a>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-md p-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Última Refeição</h3>
+            <a href="nutricao/refeicao">
+                <div class="flex items-center gap-4">
+                    <img src="{{ url_for('static', filename='nutricao/tela01_salada.jfif')}}" alt="Foto da Refeição" class="rounded-xl img80">
+                    <div>
+                        <h4 class="text-md font-medium text-gray-700">Salada de Frango com Quinoa</h4>
+                        <p class="text-gray-500 text-sm">Calorias: ~450 kcal</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="bg-yellow-100 rounded-2xl p-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">Dica Rápida</h3>
+            <div id="loading-animation" class="text-center text-gray-700 text-sm">
+                <div class="spinner"></div>
+                Carregando... 
+            </div>
+            <p class="text-gray-700 text-sm" id="dica_rapida"></p>
+        </div>
+
+        <div class="text-center text-gray-500 text-sm mt-6">
+            Créditos: Ícones de <a href="https://www.flaticon.com/free-icons/nutrition" title="nutrition icons">Nutrition icons created by Freepik - Flaticon</a><br>
+            Créditos: Ícones de <a href="https://www.flaticon.com/free-icons/meal" title="meal icons">Meal icons created by iconixar - Flaticon</a><br>
+            Créditos: Ícones de <a href="https://www.flaticon.com/free-icons/full-body" title="full body icons">Full body icons created by juicy_fish - Flaticon</a><br>
+            Créditos: Ícones de <a href="https://www.flaticon.com/free-icons/user" title="user icons">User icons created by Freepik - Flaticon</a>
+        </div>
+    </div>
+
+    <script>
+        // Elementos do DOM
+        const retornarHomeBtn = document.getElementById('retornar-home-btn');
+
+        // Event Listeners
+        retornarHomeBtn.addEventListener('click', () => {
+            // Aqui você deve adicionar a lógica para retornar à página inicial do seu sistema
+            window.location.href = "/";
+        });
+
+        function carregarDica(){
+            const loadingAnimation = document.getElementById('loading-animation');
+            const dicaRapidaElement = document.getElementById('dica_rapida');
+
+            loadingAnimation.classList.remove('hidden');
+            dicaRapidaElement.classList.add('hidden');
+
+            fetch('/agentes_ia/nutricao/getDicaRapida')
+                .then(response => response.json())
+                .then(data => {
+                    loadingAnimation.classList.add('hidden');
+                    dicaRapidaElement.classList.remove('hidden');
+                    dicaRapidaElement.innerHTML = data;
+                })
+                .catch(error => {
+                    // Em caso de erro, você pode esconder a animação e mostrar uma mensagem de erro, se desejar
+                    loadingAnimation.classList.add('hidden');
+                    dicaRapidaElement.classList.remove('hidden');
+                    dicaRapidaElement.innerHTML = 'Ocorreu um erro ao carregar a dica.';
+                })
+        }
+
+        carregarDica()
+    </script>
+</body>
+</html>

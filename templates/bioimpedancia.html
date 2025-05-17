@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela 6: Bioimpedância</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@tailwindcss/browser@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@latest/marked.min.js"></script>
+    <style>
+        /* Estilos personalizados para o tema leve e bem-estar */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 2.5rem;
+        }
+        .button {
+            padding: 0.8rem 1.6rem;
+            border-radius: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .button-primary {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .button-primary:hover {
+            background-color: #45a049;
+            transform: translateY(-0.2rem);
+        }
+        .button-secondary {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+        .button-secondary:hover {
+            background-color: #d0d0d0;
+            transform: translateY(-0.2rem);
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .input-group input {
+            padding: 0.8rem;
+            border: 0.1rem solid #e2e8f0;
+            border-radius: 0.5rem;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 1.1rem;
+            transition: border-color 0.3s ease;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+        }
+        .instructions {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: #f0fdf4;
+            border: 0.1rem solid #bbf7d0;
+            border-radius: 0.5rem;
+            color: #38a169;
+            font-size: 1rem;
+        }
+        .history-item {
+            padding: 1rem;
+            border-bottom: 0.1rem solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        .chart-container {
+            margin-top: 2.5rem;
+            width: 100%;
+            height: auto;
+            min-height: 300px;
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
+            padding: 1rem;
+            box-sizing: border-box;
+            margin-bottom: 2rem;
+        }
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .analysis-container {
+            margin-top: 2.5rem;
+            padding: 1.5rem;
+            background-color: #e8f5e9; /* Light green background */
+            border: 0.1rem solid #c8e6c9; /* Slightly darker green border */
+            border-radius: 0.5rem;
+            color: #1b5e20; /* Dark green text */
+        }
+        .analysis-container h2 {
+            color: #1b5e20;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+        .analysis-output {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            .button {
+                font-size: 1rem;
+                padding: 0.7rem 1.4rem;
+            }
+            .input-group input, .input-group label {
+                font-size: 1rem;
+            }
+            .history-item {
+                font-size: 1rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            h2 {
+                font-size: 1.3rem;
+            }
+            .chart-container {
+                min-height: 200px;
+            }
+
+             .analysis-container h2 {
+                font-size: 1.2rem;
+            }
+            .analysis-output {
+                font-size: 1rem;
+            }
+        }
+
+        #retornar-home-btn:hover{cursor: pointer;}
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container">
+        <div class="flex justify-start mb-4">
+            <button id="retornar-home-btn" class="bg-white rounded-full shadow-md py-2 px-4 text-green-700 font-semibold hover:bg-green-50 transition duration-300 ease-in-out flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left-circle"><circle cx="12" cy="12" r="10"/><path d="M12 8l-4 4 4 4"/><path d="M16 12H8"/></svg>
+                Nutrição
+            </button>
+        </div>
+        <h1>Acompanhamento de Bioimpedância</h1>
+
+        <div class="flex flex-col md:flex-row gap-4 mb-6">
+            <button id="manualInputButton" class="button button-primary">
+                 <span>Inserir Dados Manualmente</span>
+            </button>
+            <button id="uploadReportButton" class="button button-secondary">
+                <span>Upload de Relatório</span>
+            </button>
+        </div>
+
+        <div id="manualInputForm" class="hidden">
+            <h2>Inserir Dados Manualmente</h2>
+            <form>
+                <div class="input-group">
+                    <label for="weight">Peso (kg):</label>
+                    <input type="number" id="weight" name="weight" required>
+                </div>
+                <div class="input-group">
+                    <label for="fatPercentage">Gordura Corporal (%):</label>
+                    <input type="number" id="fatPercentage" name="fatPercentage" required>
+                </div>
+                <div class="input-group">
+                    <label for="muscleMass">Massa Muscular (kg):</label>
+                    <input type="number" id="muscleMass" name="muscleMass" required>
+                </div>
+                <div class="input-group">
+                    <label for="waterPercentage">Água Corporal (%):</label>
+                    <input type="number" id="waterPercentage" name="waterPercentage" required>
+                </div>
+                <div class="input-group">
+                    <label for="date">Data:</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <button type="submit" class="button button-primary w-full">Salvar Dados</button>
+            </form>
+        </div>
+
+        <div id="uploadReportSection" class="hidden">
+            <h2>Upload de Relatório</h2>
+            <div class="instructions">
+                <p>Envie o relatório de bioimpedância nos formatos PDF, DOCX ou TXT.</p>
+                <p>Certifique-se de que o arquivo contém os dados de peso, percentual de gordura corporal, massa muscular e data da medição.</p>
+            </div>
+            <div class="input-group">
+                <label for="reportFile">Selecionar Arquivo:</label>
+                <input type="file" id="reportFile" name="reportFile" accept=".pdf,.docx,.doc,.txt">
+            </div>
+             <button id="uploadButton" class="button button-primary w-full">Enviar Relatório</button>
+        </div>
+
+        <h2>Histórico de Bioimpedância</h2>
+        <div id="historyContainer">
+            </div>
+
+        <div class="chart-container">
+            <h2 class="chart-title">Evolução das Métricas</h2>
+            <canvas id="bioimpedanceChart"></canvas>
+        </div>
+
+        <div class="analysis-container">
+            <h2>Análise da Evolução</h2>
+            <div id="loading-animation" class="text-center text-gray-700 text-sm">
+                <div class="spinner"></div>
+                Carregando... 
+            </div>
+            <div id="analysisOutput" class="analysis-output">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Elementos do DOM
+        const manualInputButton = document.getElementById('manualInputButton');
+        const uploadReportButton = document.getElementById('uploadReportButton');
+        const manualInputForm = document.getElementById('manualInputForm');
+        const uploadReportSection = document.getElementById('uploadReportSection');
+        const historyContainer = document.getElementById('historyContainer');
+        const bioimpedanceChartCanvas = document.getElementById('bioimpedanceChart');
+        const uploadButton = document.getElementById('uploadButton');
+        const retornarHomeBtn = document.getElementById('retornar-home-btn');
+
+        retornarHomeBtn.addEventListener('click', () => {
+            // Aqui você deve adicionar a lógica para retornar à página inicial do seu sistema
+            window.location.href = "/nutricao";
+        });
+
+        // Dados iniciais
+        var bioimpedanceData = [
+            { date: '2025-01-01', weight: 80, fatPercentage: 32, muscleMass: 15, waterPercentage: 65 },
+            { date: '2025-02-01', weight: 82, fatPercentage: 34, muscleMass: 20, waterPercentage: 45 },
+            { date: '2025-03-01', weight: 76, fatPercentage: 28, muscleMass: 19, waterPercentage: 70 },
+            { date: '2025-04-01', weight: 72, fatPercentage: 20, muscleMass: 18, waterPercentage: 88 }
+        ];
+
+        // Variável para o gráfico
+        let bioimpedanceChart;
+
+        /**
+         * Inicializa o gráfico com os dados de bioimpedância.
+         */
+        function initChart() {
+            bioimpedanceChart = new Chart(bioimpedanceChartCanvas, {
+                type: 'line',
+                data: {
+                    labels: bioimpedanceData.map(item => item.date),
+                    datasets: [
+                        {
+                            label: 'Peso (kg)',
+                            data: bioimpedanceData.map(item => item.weight),
+                            borderColor: '#3498db',
+                            fill: false,
+                            pointRadius: 5,
+                            pointBackgroundColor: '#3498db',
+                            lineWidth: 2
+                        },
+                        {
+                            label: 'Gordura Corporal (%)',
+                            data: bioimpedanceData.map(item => item.fatPercentage),
+                            borderColor: '#e74c3c',
+                            fill: false,
+                            pointRadius: 5,
+                            pointBackgroundColor: '#e74c3c',
+                            lineWidth: 2
+                        },
+                        {
+                            label: 'Massa Muscular (kg)',
+                            data: bioimpedanceData.map(item => item.muscleMass),
+                            borderColor: '#2ecc71',
+                            fill: false,
+                            pointRadius: 5,
+                            pointBackgroundColor: '#2ecc71',
+                            lineWidth: 2
+                        },
+                        {
+                            label: 'Água Corporal (%)',
+                            data: bioimpedanceData.map(item => item.waterPercentage),
+                            borderColor: '#f1c40f',
+                            fill: false,
+                            pointRadius: 5,
+                            pointBackgroundColor: '#f1c40f',
+                            lineWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Data',
+                                font: {
+                                    size: 14,
+                                    family: 'Inter',
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                font: {
+                                    size: 12,
+                                    family: 'Inter'
+                                }
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Valor',
+                                font: {
+                                    size: 14,
+                                    family: 'Inter',
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                font: {
+                                    size: 12,
+                                    family: 'Inter'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: 'Inter',
+                                    size: 12
+                                },
+                                boxWidth: 20,
+                                padding: 10
+                            }
+                        }
+                    },
+                    layout: {
+                        padding: {
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            bottom: 0
+                        }
+                    }
+                }
+            });
+        }
+
+        /**
+         * Atualiza o gráfico com os dados de bioimpedância.
+         */
+        function updateCharts() {
+            bioimpedanceChart.data.labels = bioimpedanceData.map(item => item.date);
+            bioimpedanceChart.data.datasets[0].data = bioimpedanceData.map(item => item.weight);
+            bioimpedanceChart.data.datasets[1].data = bioimpedanceData.map(item => item.fatPercentage);
+            bioimpedanceChart.data.datasets[2].data = bioimpedanceData.map(item => item.muscleMass);
+            bioimpedanceChart.data.datasets[3].data = bioimpedanceData.map(item => item.waterPercentage);
+            bioimpedanceChart.update();
+        }
+
+        /**
+         * Exibe o histórico de bioimpedância na página.
+         */
+        function displayHistory() {
+            historyContainer.innerHTML = '';
+            bioimpedanceData.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.classList.add('history-item');
+                historyItem.innerHTML = `
+                    <span>Data: ${item.date}</span>
+                    <span>Peso: ${item.weight} kg</span>
+                    <span>Gordura: ${item.fatPercentage} %</span>
+                    <span>Massa Muscular: ${item.muscleMass} kg</span>
+                    <span>Água: ${item.waterPercentage} %</span>
+                `;
+                historyContainer.appendChild(historyItem);
+            });
+        }
+
+        function carregarAnalise(){
+            const loadingAnimation = document.getElementById('loading-animation');
+            const analysisOutputElement = document.getElementById('analysisOutput');
+
+            loadingAnimation.classList.remove('hidden');
+            analysisOutputElement.classList.add('hidden');
+
+            fetch('/agentes_ia/nutricao/getAnaliseBio')
+                .then(response => response.json())
+                .then(data => {
+                    loadingAnimation.classList.add('hidden');
+                    analysisOutputElement.classList.remove('hidden');
+
+                    const markdownText = data; // Texto recebido da API
+                    const htmlText = marked.parse(markdownText); // Converte Markdown para HTML
+
+                    analysisOutputElement.innerHTML = htmlText;
+                })
+                .catch(error => {
+                    // Em caso de erro, você pode esconder a animação e mostrar uma mensagem de erro, se desejar
+                    loadingAnimation.classList.add('hidden');
+                    analysisOutputElement.classList.remove('hidden');
+                    analysisOutputElement.innerHTML = 'Ocorreu um erro ao carregar a analise.';
+                })
+        }
+        // Event listeners para os botões de entrada de dados
+        manualInputButton.addEventListener('click', () => {
+            manualInputForm.classList.remove('hidden');
+            uploadReportSection.classList.add('hidden');
+        });
+
+        uploadReportButton.addEventListener('click', () => {
+            uploadReportSection.classList.remove('hidden');
+            manualInputForm.classList.add('hidden');
+        });
+
+        // Event listener para o formulário de entrada manual
+        manualInputForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const weight = parseFloat(document.getElementById('weight').value);
+            const fatPercentage = parseFloat(document.getElementById('fatPercentage').value);
+            const muscleMass = parseFloat(document.getElementById('muscleMass').value);
+            const waterPercentage = parseFloat(document.getElementById('waterPercentage').value);
+            const date = document.getElementById('date').value;
+
+            if (isNaN(weight) || isNaN(fatPercentage) || isNaN(muscleMass) || isNaN(waterPercentage) || !date) {
+                alert('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
+
+            bioimpedanceData.push({ date, weight, fatPercentage, muscleMass, waterPercentage });
+            localStorage.setItem('bioimpedanceData', JSON.stringify(bioimpedanceData));
+            displayHistory();
+            updateCharts();
+            manualInputForm.reset();
+            manualInputForm.classList.add('hidden');
+            alert('Dados de bioimpedância salvos com sucesso!');
+        });
+
+        // Event listener para o botão de upload de relatório
+        uploadButton.addEventListener('click', () => {
+            const fileInput = document.getElementById('reportFile');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Por favor, selecione um arquivo.');
+                return;
+            }
+
+            // Simulação de processamento do arquivo
+            setTimeout(() => {
+                // Aqui, você extrairia os dados do arquivo (simulado)
+                const simulatedData = {
+                    date: new Date().toISOString().split('T')[0],
+                    weight: Math.random() * 50 + 50,
+                    fatPercentage: Math.random() * 20 + 10,
+                    muscleMass: Math.random() * 30 + 20,
+                    waterPercentage: Math.random() * 15 + 40
+                };
+
+                bioimpedanceData.push({ date, weight, fatPercentage, muscleMass, waterPercentage });
+                localStorage.setItem('bioimpedanceData', JSON.stringify(bioimpedanceData));
+                displayHistory();
+                updateCharts();
+                uploadReportSection.classList.add('hidden');
+                alert('Relatório enviado e dados processados com sucesso!');
+                fileInput.value = '';
+            }, 2000);
+        });
+        
+        initChart();
+        displayHistory();
+        updateCharts();
+        carregarAnalise();
+    </script>
+</body>
+</html>

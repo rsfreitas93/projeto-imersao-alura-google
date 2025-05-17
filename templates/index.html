@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistente de Bem Estar - Início</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Define uma paleta de cores suave inspirada na natureza */
+        :root {
+            --color-primary-light-green: #E0F2F7; /* Azul sereno/verde claro */
+            --color-primary-light-blue: #E3F2FD; /* Azul sereno */
+            --color-primary-beige: #FFF3E0; /* Bege suave */
+            --color-primary-peach: #FFECDB; /* Pêssego suave */
+            --color-primary-lavender: #F3E5F5; /* Lavanda suave */
+            --color-neutral-gray: #757575; /* Cinza neutro */
+            --color-secondary-teal: #4DB6AC; /* Verde/Azul vibrante suave */
+            --color-secondary-orange: #FFB74D; /* Laranja vibrante suave */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif; /* Fonte sans-serif limpa */
+            background-color: #FFFFFF; /* Fundo branco para leveza */
+            color: var(--color-neutral-gray); /* Cor de texto padrão suave */
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Evita scroll horizontal */
+        }
+
+        /* Estilo para a área de destaque/personalização */
+        .highlight-area {
+            background-color: var(--color-primary-light-blue); /* Fundo suave */
+            padding: 1.5rem; /* Espaçamento interno */
+            margin-bottom: 1.5rem; /* Espaço abaixo */
+            border-radius: 0 0 1.5rem 1.5rem; /* Cantos inferiores arredondados */
+            text-align: center;
+        }
+
+        .highlight-area h1 {
+            font-size: 1.5rem; /* Tamanho do título */
+            font-weight: bold;
+            color: #212121; /* Cor mais escura para destaque */
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-area p {
+            font-size: 1rem; /* Tamanho do texto */
+            color: #424242; /* Cor de texto secundária */
+        }
+
+        /* Estilo para o grid de cards das áreas */
+        .areas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Grid responsivo */
+            gap: 1rem; /* Espaço entre os cards */
+            padding: 0 1.5rem; /* Espaçamento lateral */
+        }
+
+        /* Estilo para cada card de área */
+        .area-card {
+            background-color: #FFFFFF; /* Fundo branco para o card */
+            border-radius: 0.75rem; /* Cantos arredondados */
+            padding: 1.25rem; /* Espaçamento interno */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Transição suave para feedback */
+            cursor: pointer; /* Indica que é clicável */
+        }
+
+        .area-card:hover {
+            transform: translateY(-5px); /* Efeito ao passar o mouse */
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Sombra um pouco maior */
+        }
+
+        .area-card:active {
+             transform: scale(0.98); /* Efeito ao clicar */
+        }
+
+
+        /* Estilo para o ícone dentro do card */
+        .area-icon {
+            width: 3rem; /* Tamanho do ícone */
+            height: 3rem;
+            background-color: var(--color-secondary-teal); /* Cor de fundo para o ícone (placeholder) */
+            border-radius: 50%; /* Ícone circular (placeholder) */
+            margin-bottom: 0.75rem; /* Espaço abaixo do ícone */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem; /* Tamanho do texto/emoji no ícone */
+            color: #FFFFFF; /* Cor do ícone (placeholder) */
+        }
+
+         /* Cores de fundo diferentes para os ícones para variar */
+        .area-card:nth-child(1) .area-icon { background-color: var(--color-secondary-teal); }
+        .area-card:nth-child(2) .area-icon { background-color: var(--color-secondary-orange); }
+        .area-card:nth-child(3) .area-icon { background-color: var(--color-primary-light-green); color: #424242; }
+        .area-card:nth-child(4) .area-icon { background-color: var(--color-primary-lavender); color: #424242; }
+        .area-card:nth-child(5) .area-icon { background-color: var(--color-primary-beige); color: #424242; }
+        .area-card:nth-child(6) .area-icon { background-color: var(--color-primary-light-blue); color: #424242; }
+        .area-card:nth-child(7) .area-icon { background-color: var(--color-secondary-teal); }
+
+
+        /* Estilo para o nome da área */
+        .area-name {
+            font-size: 1.1rem; /* Tamanho do nome */
+            font-weight: bold;
+            color: #212121; /* Cor mais escura para o nome */
+            margin-bottom: 0.5rem;
+        }
+
+        /* Estilo para o resumo visual/indicador (opcional) */
+        .area-summary {
+            font-size: 0.9rem; /* Tamanho do resumo */
+            color: #616161; /* Cor de texto suave */
+        }
+
+        /* Espaço em branco adicional no final para telas menores */
+        .pb-safe-area {
+            padding-bottom: constant(safe-area-inset-bottom);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+         /* Estilo para ilustrações sutis (placeholder) */
+        .subtle-illustration {
+            width: 100%;
+            height: 100px; /* Altura da ilustração */
+            background: linear-gradient(to bottom, var(--color-primary-light-blue), #FFFFFF); /* Gradiente suave */
+            margin-bottom: 1.5rem; /* Espaço abaixo */
+            /* Aqui entraria uma ilustração SVG ou imagem suave */
+        }
+
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="highlight-area">
+        <h1>Olá, [Nome do Usuário]!</h1>
+        <p>Seu resumo do dia: 💧 2/8 copos • ✨ Próxima meditação às 14h</p>
+    </div>
+
+     <div class="areas-grid">
+        <a href="nutricao">
+            <div class="area-card">
+                <div class="area-icon">🥗</div> <div class="area-name">Nutrição</div>
+                <div class="area-summary">Seu plano alimentar</div>
+            </div>
+        </a>
+
+        <div class="area-card">
+            <div class="area-icon">🧠</div> <div class="area-name">Saúde Mental</div>
+            <div class="area-summary">Diário e exercícios - EM BREVE</div>
+        </div>
+
+        <div class="area-card">
+            <div class="area-icon">💧</div> <div class="area-name">Hidratação</div>
+            <div class="area-summary">Meta: 2/8 copos - EM BREVE</div>
+        </div>
+
+        <div class="area-card">
+            <div class="area-icon">🏋️</div> <div class="area-name">Exercício</div>
+            <div class="area-summary">Treino do dia - EM BREVE</div>
+        </div>
+
+        <div class="area-card">
+            <div class="area-icon">😴</div> <div class="area-name">Sono</div>
+            <div class="area-summary">Registro e análise - EM BREVE</div>
+        </div>
+
+        <div class="area-card">
+            <div class="area-icon">👩‍⚕️</div> <div class="area-name">Saúde geral</div>
+            <div class="area-summary">Consultas e exames - EM BREVE</div>
+        </div>
+
+        <div class="area-card">
+            <div class="area-icon">🤝</div> <div class="area-name">Conexão Social</div>
+            <div class="area-summary">Gerencie seus contatos - EM BREVE</div>
+        </div>
+    </div>
+
+    <div class="pb-safe-area"></div>
+
+</body>
+</html>
