@@ -4,7 +4,6 @@
 Assista a este vídeo para entender a visão completa do Assistente de Bem Estar, o problema que ele resolve, as 7 áreas que ele abrange (incluindo o futuro suporte a múltiplos perfis), e como o Módulo de Nutrição se encaixa nesse ecossistema, incluindo os argumentos sobre Utilidade, Criatividade e Eficácia.
 
 [![Texto Alternativo para a Imagem](https://img.youtube.com/vi/mt2AuJTck9Y/0.jpg)](https://youtu.be/mt2AuJTck9Y)
-https://youtu.be/mt2AuJTck9Y
 
 # Assistente de Bem Estar - Projeto Imersão IA Alura + Google Gemini
 
