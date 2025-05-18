@@ -7,8 +7,6 @@ Assista a este vídeo para entender a visão completa do Assistente de Bem Estar
 
 # Assistente de Bem Estar - Projeto Imersão IA Alura + Google Gemini
 
-BANNER A INSERIR
-
 Um aplicativo mobile focado em promover e facilitar o bem-estar holístico, utilizando Inteligência Artificial para personalizar, automatizar e integrar diversas áreas da vida que impactam a saúde física e mental. Desenvolvido como parte da Imersão IA da Alura em parceria com o Google Gemini.
 
 ## 💡 O Problema
