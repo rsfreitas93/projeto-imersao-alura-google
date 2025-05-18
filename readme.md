@@ -47,8 +47,8 @@ Este módulo serve como prova de conceito para a aplicação da IA na análise d
 
 ## ✨ Funcionalidades Implementadas (Módulo Nutrição - Sem banco de dados!)
 
-* **Registro de Refeições:** Interface para adicionar refeições, incluindo nome do alimento, quantidade e opção de foto (conceitual ou implementada).
-* **Acompanhamento Básico:** Visualização do que foi registrado no dia/período.
+* **Registro de Refeições:** Interface para adicionar refeições, incluindo nome do alimento, quantidade e unidade de medida (com conversão para gramas por IA) e opção de upload de foto que identifica automaticamente os alimentos e suas quantidades por IA.
+* **Mensagens de dicas e análises simpels:** Geração de mensagens rápidas de dicas e análises conforme o objetivo do usuário e os dados de sua alimentação, biometria e metas nutricionais.
 * **Chefbot Culinário com Gemini:** Um assistente interativo que utiliza o modelo Google Gemini para:
     * Responder dúvidas rápidas sobre alimentos e nutrição.
     * Sugerir receitas com base em ingredientes disponíveis ou metas (ex: "receita proteica com frango").
