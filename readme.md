@@ -1,4 +1,11 @@
 # DOCUMENTO EM DESENVOLVIMENTO
+## ▶️ Vídeo de Apresentação
+
+Assista a este vídeo para entender a visão completa do Assistente de Bem Estar, o problema que ele resolve, as 7 áreas que ele abrange (incluindo o futuro suporte a múltiplos perfis), e como o Módulo de Nutrição se encaixa nesse ecossistema, incluindo os argumentos sobre Utilidade, Criatividade e Eficácia.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/mt2AuJTck9Y?si=-psJApUeZuuGKd5s" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+https://youtu.be/mt2AuJTck9Y
+
 
 # Assistente de Bem Estar - Projeto Imersão IA Alura + Google Gemini
 
@@ -79,12 +86,7 @@ A INSERIR
 
 A INSERIR
 
-## ▶️ Vídeo de Apresentação
 
-Assista a este vídeo para entender a visão completa do Assistente de Bem Estar, o problema que ele resolve, as 7 áreas que ele abrange (incluindo o futuro suporte a múltiplos perfis), e como o Módulo de Nutrição se encaixa nesse ecossistema, incluindo os argumentos sobre Utilidade, Criatividade e Eficácia.
-
-A INSERIR
-(Substitua este texto pelo link direto ou código embed do seu vídeo)
 
 ## Roadmap (Próximos Passos)
 
