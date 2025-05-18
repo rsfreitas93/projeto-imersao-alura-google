@@ -1,5 +1,1 @@
-- Instalar no terminal do python a google-genai (pip install google-genai)
-- Instalar no terminal do python o server flask (pip install flask)
-- Instalar no terminal do python a ADK de agentes do Google (pip install google-adk)
-- pip install python-dotenv 
-- pip install Flask-Cors
+- pip install google-genai flask google-adk
