@@ -45,7 +45,7 @@ Considerando o tempo limitado da Imersão IA Alura + Google Gemini, o projeto fo
 
 Este módulo serve como prova de conceito para a aplicação da IA na análise de hábitos diários e na oferta de assistência personalizada.
 
-## ✨ Funcionalidades Implementadas (Módulo Nutrição - Sem banco de dados!)
+## 🤖 Funcionalidades de IA Implementadas (Módulo Nutrição - Sem banco de dados!)
 
 * **Registro de Refeições:** Interface para adicionar refeições, incluindo nome do alimento, quantidade e unidade de medida (com conversão para gramas por IA) e opção de upload de foto que identifica automaticamente os alimentos e suas quantidades por IA.
 * **Mensagens de dicas e análises simpels:** Geração de mensagens rápidas de dicas e análises conforme o objetivo do usuário e os dados de sua alimentação, biometria e metas nutricionais.
@@ -54,21 +54,9 @@ Este módulo serve como prova de conceito para a aplicação da IA na análise d
     * Sugerir receitas com base em ingredientes disponíveis ou metas (ex: "receita proteica com frango").
     * Oferecer dicas de substituições saudáveis.
 
-## 🤖 Aplicação da IA (Google Gemini)
-
-Neste projeto, o modelo Google Gemini foi utilizado principalmente no **Chatbot Culinário**. Ele demonstra a capacidade da IA em:
-
-* Compreender linguagem natural para interações em tempo real.
-* Acessar e processar informações sobre nutrição e culinária.
-* Gerar respostas relevantes e personalizadas para as perguntas e solicitações do usuário.
-
-Embora a análise de padrões alimentares mais complexa (como identificação de deficiências) seja uma feature futura dependente de um banco de dados, o chatbot já ilustra o potencial da IA em tornar a informação nutricional mais acessível e interativa.
-
-OUTRAS A INSERIR
-
 ## 💻 Tecnologias Utilizadas
 
-* Linguagem/Framework: A INSERIR
+* Linguagem/Framework: HTML, CSS, Javascript e Python (com Flask). 
 * Modelo de IA: Google Gemini 2.0 Flash
 * Outras Bibliotecas/APIs: A INSERIR
 
@@ -92,6 +80,7 @@ A INSERIR
 * Aprofundar a análise de IA, cruzando dados entre as diferentes áreas para insights holísticos.
 * Melhorar a UI/UX com base em testes com usuários.
 * Explorar outras funcionalidades baseadas em IA (ex: análise de imagem de alimentos, reconhecimento de voz para registro).
+* Migrar para uma tecnologia de aplicativos mobile
 
 ## 📜 Licença
 
